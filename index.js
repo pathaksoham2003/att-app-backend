@@ -13,7 +13,11 @@ app.use(cors());
 app.use(express.json())
 app.use("/employee",employeeRouter);
 app.use("/admin",adminRouter);
-
+app.get("/",(req,res)=>{
+    res.status(200).json({
+        message:"Welcome to the server"
+    })
+})
 app.listen(PORT,()=>{
     console.log({message:"Successfully started server"})
 })
