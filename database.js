@@ -23,7 +23,8 @@ CREATE TABLE ATT_LOCATION (
 (async () => {
     await client.connect();
   try {
-    const results = await client.query(`SELECT * FROM ATT_LOCATION`);
+    const results = await client.query(`SELECT * FROM ATT_LOCATION
+    `);
     console.log(results.rows);
     console.log("Database Connection");
   } catch (err) {

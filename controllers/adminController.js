@@ -39,12 +39,24 @@ OFFICE IS 1 KM AWAY RANGE IS 0.5KM
   }
 */
 
+const setLocationStatus = (req,res)=>{
+  const {location_id} = req.params;
+  const {apply} = req.body;
+  db.query(`UPDATE ATT_LOCATION SET apply = $1 WHERE location_id=$2 RETURNING *`,[apply,location_id],(err,result)=>{
+    if(err){
+      console.log(err);
+      return res.status(400).json({message:"Error Quering the Database"});
+    }
+    return res.status(200).json(result.rows[0]);
+  })
+}
+
 const createLocation = (req, res) => {
-  const { place, longitude, latitude, range } = req.body;
+  const { place, longitude, latitude, range, apply } = req.body;
   const rangeInMeters = range * 1000;
   db.query(
-    `INSERT INTO ATT_LOCATION (place,latitude,longitude,range) VALUES ($1,$2,$3,$4) RETURNING *`,
-    [place, latitude, longitude, rangeInMeters],
+    `INSERT INTO ATT_LOCATION (place,latitude,longitude,range,apply) VALUES ($1,$2,$3,$4,$5) RETURNING *`,
+    [place, latitude, longitude, rangeInMeters,apply],
     (err, result) => {
       if (err) {
         return res.status(400).json({ message: "Error Quering the database" });
@@ -68,4 +80,4 @@ const deleteLocation = (req, res) => {
   );
 };
 
-module.exports = { getLocations, createLocation, deleteLocation };
+module.exports = { getLocations, createLocation, deleteLocation ,setLocationStatus};
